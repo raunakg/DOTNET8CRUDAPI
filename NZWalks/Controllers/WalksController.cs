@@ -45,14 +45,14 @@ namespace NZWalks.Controllers
 
 
         // Get all walks
-        // GET: /api/walks
+        // GET: /api/walks?filterOn={filterOn}&filterQuery={filterQuery}&sortBy={sortBy}&isAscending={isAscending}
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn,
          [FromQuery] string? filterQuery,
-         [FromQuery] string? sortBy, [FromQuery] bool? isAscending)
+         [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             // Get all walks
-            var walks = await _walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true);
+            var walks = await _walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
 
             // Map the walks to WalkDtos
             var walkDtos = _mapper.Map<IEnumerable<WalkDto>>(walks);

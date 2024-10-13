@@ -20,9 +20,26 @@ public class SQLWalkRepository : IWalkRepository
         return walk;
     }
 
-    public async Task<List<Walk>> GetAllAsync()
+    public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
     {
-        return await _dbContext.Walks.Include("Difficulty").Include("Region").ToListAsync();
+        // return await _dbContext.Walks.Include("Difficulty").Include("Region").ToListAsync();
+        var walks = _dbContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
+
+        // Filter the walks
+        if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterQuery))
+        {
+            switch (filterOn.ToLower())
+            {
+                case "name":
+                    walks = walks.Where(w => w.Name.Contains(filterQuery));
+                    break;
+                case "description":
+                    walks = walks.Where(w => w.Description.Contains(filterQuery));
+                    break;
+            }
+        }
+
+        return await walks.ToListAsync();
 
 
     }

@@ -47,10 +47,10 @@ namespace NZWalks.Controllers
         // Get all walks
         // GET: /api/walks
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
             // Get all walks
-            var walks = await _walkRepository.GetAllAsync();
+            var walks = await _walkRepository.GetAllAsync(filterOn, filterQuery);
 
             // Map the walks to WalkDtos
             var walkDtos = _mapper.Map<IEnumerable<WalkDto>>(walks);

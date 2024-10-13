@@ -7,7 +7,8 @@ public interface IWalkRepository
 {
     Task<Walk> CreateWalkAsync(Walk walk);
 
-    Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null);
+    Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null,
+    string? sortBy = null, bool isAscending = true);
 
     Task<Walk?> GetByIdAsync(Guid id);
 

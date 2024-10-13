@@ -20,7 +20,8 @@ public class SQLWalkRepository : IWalkRepository
         return walk;
     }
 
-    public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
+    public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null,
+     string? sortBy = null, bool isAscending = true)
     {
         // return await _dbContext.Walks.Include("Difficulty").Include("Region").ToListAsync();
         var walks = _dbContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
@@ -35,6 +36,20 @@ public class SQLWalkRepository : IWalkRepository
                     break;
                 case "description":
                     walks = walks.Where(w => w.Description.Contains(filterQuery));
+                    break;
+            }
+        }
+
+        // Sort the walks
+        if (!string.IsNullOrWhiteSpace(sortBy))
+        {
+            switch (sortBy.ToLower())
+            {
+                case "name":
+                    walks = isAscending ? walks.OrderBy(w => w.Name) : walks.OrderByDescending(w => w.Name);
+                    break;
+                case "lengthinkm":
+                    walks = isAscending ? walks.OrderBy(w => w.LengthInKm) : walks.OrderByDescending(w => w.LengthInKm);
                     break;
             }
         }
